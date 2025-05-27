@@ -1,20 +1,11 @@
-import { useState } from "react"
 import "./Counter.css"
+import { useDispatch, useSelector } from "react-redux"
+import type { RootState } from "./state/store"
+import { decrement, incrementByAmount, reset } from "./state/counter/counterSlice"
 
 const Counter = () => {
-  const [count, setCount] = useState<number>(0)
-
-  const increment = (): void => {
-    setCount((prevCount) => prevCount + 1)
-  }
-
-  const decrement = (): void => {
-    setCount((prevCount) => prevCount - 1)
-  }
-
-  const reset = (): void => {
-    setCount(0)
-  }
+  const count = useSelector((state: RootState) => state.counter.value)
+  const dispatch = useDispatch()
 
   const getCountColor = (): string => {
     if (count > 0) return "positive"
@@ -30,13 +21,13 @@ const Counter = () => {
           <span className={`counter-value ${getCountColor()}`}>{count}</span>
         </div>
         <div className='counter-buttons'>
-          <button className='counter-btn decrement-btn' onClick={decrement} type='button'>
+          <button className='counter-btn decrement-btn' onClick={() => dispatch(decrement())} type='button'>
             -
           </button>
-          <button className='counter-btn reset-btn' onClick={reset} type='button'>
+          <button className='counter-btn reset-btn' onClick={() => dispatch(reset())} type='button'>
             Reset
           </button>
-          <button className='counter-btn increment-btn' onClick={increment} type='button'>
+          <button className='counter-btn increment-btn' onClick={() => dispatch(incrementByAmount(10))} type='button'>
             +
           </button>
         </div>
